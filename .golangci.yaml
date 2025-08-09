@@ -1,0 +1,52 @@
+# .golangci.yml
+run:
+  timeout: 3m
+  tests: true
+  go: "1.22"
+
+linters-settings:
+  staticcheck:
+    checks: ["all"]
+  govet:
+    enable-all: true
+  revive:
+    # Keep rules minimal at first—raise later as the team stabilizes.
+    rules:
+      - name: exported
+        severity: warning
+  gocyclo:
+    min-complexity: 15
+  errcheck:
+    # Catch unchecked errors, but allow _ in tests.
+    exclude-functions:
+      - (*testing.T).Error
+      - (*testing.T).Fatal
+      - (*testing.T).Fatalf
+      - (*testing.T).Log
+      - (*testing.T).Logf
+      - (*testing.T).Errorf
+
+linters:
+  enable:
+    - gosimple
+    - govet
+    - staticcheck
+    - revive
+    - errcheck
+    - ineffassign
+    - gocyclo
+    - gofumpt # Format check; pairs with the gofumpt formatter
+  disable:
+    - depguard   # Turn on later when module boundaries harden
+    - dupl       # Too noisy early on
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  exclude-dirs:
+    - vendor
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
