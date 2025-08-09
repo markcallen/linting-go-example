@@ -14,7 +14,11 @@ func main() {
 
 	if *api {
 		http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "Hello from the Go API!")
+			_, err := fmt.Fprintln(w, "Hello from the Go API!")
+			if err != nil {
+				// Handle the error, e.g., log it or exit
+				log.Fatal("Error writing response")
+			}
 		})
 		fmt.Println("Serving HTTP on :8080")
 		log.Fatal(http.ListenAndServe(":8080", nil))
