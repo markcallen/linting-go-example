@@ -1,0 +1,29 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0 # Use the latest stable version
+    hooks:
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/Bahjat/pre-commit-golang
+    rev: v1.0.5
+    hooks:
+      - id: gofumpt
+
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v2.3.1           # Use the latest release
+    hooks:
+      - id: golangci-lint
+
+  # Keep modules tidy so CI and local builds match
+  - repo: local
+    hooks:
+      - id: go-mod-tidy
+        name: go mod tidy
+        entry: bash -c 'go mod tidy && git add go.mod go.sum'
+        language: system
+        files: ^(go\.mod|go\.sum)$
+        pass_filenames: false
